@@ -54,3 +54,21 @@ def librarian_view(request):
 def member_view(request):
     return render(request, 'relationship_app/member_view.html')
 
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import permission_required
+from .models import Book
+
+@permission_required('relationship_app.can_add_book')
+def add_book(request):
+    return render(request, 'permission_check/add.html')  # dummy view
+
+@permission_required('relationship_app.can_change_book')
+def edit_book(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    return render(request, 'permission_check/edit.html', {'book': book})  # dummy view
+
+@permission_required('relationship_app.can_delete_book')
+def delete_book(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+    book.delete()
+    return redirect('home')  # or some list view
