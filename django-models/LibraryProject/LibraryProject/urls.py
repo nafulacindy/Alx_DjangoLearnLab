@@ -21,4 +21,5 @@ from django.urls import path, include
 urlpatterns = [
     path('', include('home.urls')),  # now handles the root URL
     path('admin/', admin.site.urls),
+    path('', include('relationship_app.urls'))
 ]
