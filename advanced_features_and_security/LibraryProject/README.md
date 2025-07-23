@@ -1,0 +1,2 @@
+"# LibraryProject" 
+This is a Django project created during the ALX Introduction to Django task. It includes a homepage served via the `book_store` app and demonstrates basic Django project setup and structure.
