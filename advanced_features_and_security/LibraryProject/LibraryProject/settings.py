@@ -32,6 +32,29 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
 
+# Redirects all HTTP traffic to HTTPS
+SECURE_SSL_REDIRECT = True
+
+# Enforce HTTPS with HSTS for 1 year
+SECURE_HSTS_SECONDS = 31536000  # 1 year in seconds
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to all subdomains
+SECURE_HSTS_PRELOAD = True  # Allow site to be included in browsers' HSTS preload list
+
+# Secure cookies
+SESSION_COOKIE_SECURE = True  # Ensures session cookies are only sent over HTTPS
+CSRF_COOKIE_SECURE = True     # Ensures CSRF cookies are only sent over HTTPS
+
+# Clickjacking protection
+X_FRAME_OPTIONS = "DENY"
+
+# Prevent the browser from guessing content types
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Enable browser’s XSS filter
+SECURE_BROWSER_XSS_FILTER = True
+
+
+
 ALLOWED_HOSTS = []
 
 
@@ -155,3 +178,5 @@ Security Measures:
 - ORM used for all DB operations to prevent SQL injection
 - Content Security Policy added using django-csp
 """
+
+
