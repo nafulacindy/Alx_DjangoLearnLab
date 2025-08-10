@@ -9,19 +9,17 @@ from .serializers import BookSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 
 
-
-
-
 class BookListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     # Add filtering, search, ordering
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['author', 'publication_year']  # Filter by author or date
     search_fields = ['title', 'author']  # Search in title and author
     ordering_fields = ['title', 'publication_year']  # Allow ordering by title or date
+    ordering = ['title']
 
 # DetailView - Read-only (Anyone can see)
 class BookDetailView(generics.RetrieveAPIView):
@@ -46,4 +44,10 @@ class BookDeleteView(generics.DestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+# Filtering: /api/books/?title=BookTitle&author=AuthorName
+# Searching: /api/books/?search=keyword
+# Ordering: /api/books/?ordering=fieldname (prefix with - for descending)
+
 
