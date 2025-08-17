@@ -24,15 +24,12 @@ urlpatterns = [
     path("posts/", views.post_list, name="post_list"),
     path("posts/<int:pk>/", views.post_detail, name="post_detail"),
     path("search/", views.search, name="search"),
-     # Post CRUD
-    path("", PostListView.as_view(), name="post_list"),   
-    path("post/<int:pk>/", PostDetailView.as_view(), name="post_detail"),
-    path("post/new/", PostCreateView.as_view(), name="post_new"),
-    path("post/<int:pk>/update/", PostUpdateView.as_view(), name="post_update"),
-    path("post/<int:pk>/delete/", PostDeleteView.as_view(), name="post_delete"),
-
-    # Comment CRUD (nested under posts)
-    path("post/<int:pk>/comments/new/", CommentCreateView.as_view(), name="comment_new"),
-    path("comments/<int:pk>/update/", CommentUpdateView.as_view(), name="comment_update"),
-    path("comments/<int:pk>/delete/", CommentDeleteView.as_view(), name="comment_delete"),
+    path("", PostListView.as_view(), name="post_list"),   # homepage -> list of posts
+    path("post/<int:pk>/", PostDetailView.as_view(), name="post_detail"),  # view post
+    path("post/new/", PostCreateView.as_view(), name="post_new"),  # create new post
+    path("post/<int:pk>/update/", PostUpdateView.as_view(), name="post_update"),  # edit
+    path("post/<int:pk>/delete/", PostDeleteView.as_view(), name="post_delete"),  # delete
+    path('post/<int:pk>/comments/new/', CommentCreateView.as_view(), name='comment-create'),
+    path('comment/<int:pk>/update/', CommentUpdateView.as_view(), name='comment-update'),
+    path('comment/<int:pk>/delete/', CommentDeleteView.as_view(), name='comment-delete'),
 ]
