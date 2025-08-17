@@ -4,8 +4,11 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.core.exceptions import FieldError
-
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
 from .models import Post
+
+
 
 
 def home(request):
@@ -50,3 +53,35 @@ def search(request):
         except FieldError:
             posts = Post.objects.filter(base_q).distinct()
     return render(request, "blog/search_results.html", {"posts": posts, "q": query})
+
+
+
+
+class PostListView(ListView):
+    model = Post
+    template_name = "blog/post_list.html"   # use your existing template
+    context_object_name = "posts"
+
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = "blog/post_detail.html"  # your existing template
+    context_object_name = "post"
+
+
+class PostCreateView(CreateView):
+    model = Post
+    template_name = "blog/post_form.html"   # reuse your form template
+    fields = ["title", "content", "author"]  # adjust if you have more fields
+
+
+class PostUpdateView(UpdateView):
+    model = Post
+    template_name = "blog/post_form.html"   # reuse same form template
+    fields = ["title", "content", "author"]
+
+
+class PostDeleteView(DeleteView):
+    model = Post
+    template_name = "blog/post_confirm_delete.html"  # existing delete template
+    success_url = reverse_lazy("post_list")
