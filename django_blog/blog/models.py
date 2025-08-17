@@ -19,6 +19,7 @@ class Comment(models.Model):
     author = models.CharField(max_length=100)
     text = models.TextField()
     created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)  
 
     def __str__(self):
         return f"Comment by {self.author} on {self.post.title}"
