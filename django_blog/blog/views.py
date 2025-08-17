@@ -1,3 +1,5 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
@@ -7,6 +9,7 @@ from django.core.exceptions import FieldError
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import Post
+
 
 
 
@@ -59,29 +62,44 @@ def search(request):
 
 class PostListView(ListView):
     model = Post
-    template_name = "blog/post_list.html"   # use your existing template
+    template_name = "blog/post_list.html"
     context_object_name = "posts"
 
 
 class PostDetailView(DetailView):
     model = Post
-    template_name = "blog/post_detail.html"  # your existing template
-    context_object_name = "post"
+    template_name = "blog/post_detail.html"
 
 
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    template_name = "blog/post_form.html"   # reuse your form template
-    fields = ["title", "content", "author"]  # adjust if you have more fields
+    fields = ["title", "content"]
+    template_name = "blog/post_form.html"
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
 
-class PostUpdateView(UpdateView):
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
-    template_name = "blog/post_form.html"   # reuse same form template
-    fields = ["title", "content", "author"]
+    fields = ["title", "content"]
+    template_name = "blog/post_form.html"
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.author
 
 
-class PostDeleteView(DeleteView):
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
-    template_name = "blog/post_confirm_delete.html"  # existing delete template
+    template_name = "blog/post_confirm_delete.html"
     success_url = reverse_lazy("post_list")
+
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.author
