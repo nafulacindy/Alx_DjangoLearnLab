@@ -14,8 +14,6 @@ from .models import Comment
 
 
 
-
-
 def home(request):
     return render(request, "blog/home.html")
 
@@ -105,6 +103,19 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         post = self.get_object()
         return self.request.user == post.author
+
+
+class PostSearchView(ListView):
+    model = Post
+    template_name = 'blog/post_search_results.html'
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Post.objects.filter(title__icontains=query) | Post.objects.filter(content__icontains=query)
+        return Post.objects.all()
+
 
 # Create Comment
 class CommentCreateView(LoginRequiredMixin, CreateView):
