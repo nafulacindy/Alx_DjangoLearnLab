@@ -13,19 +13,17 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'password']
 
     def create(self, validated_data):
-        # use get_user_model().objects.create_user
         user = User.objects.create_user(
             username=validated_data['username'],
             email=validated_data.get('email'),
             password=validated_data['password']
         )
-        # create auth token for the new user
         Token.objects.create(user=user)
         return user
