@@ -19,9 +19,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # security / prod
 DEBUG = False
 ALLOWED_HOSTS = [
-    "alx-djangolearnlab-2-zgmt.onrender.com",
+    ".onrender.com",  # Render domain
     "localhost",
+    "127.0.0.1",
 ]
+
+# Database
+DATABASES = {
+    "default": dj_database_url.config(
+        default="sqlite:///db.sqlite3",
+        conn_max_age=600,
+        ssl_require=True
+    )
+}
+
+
+PORT = os.environ.get("PORT", 8000)  # Default 8000 for local dev
+
 
 
 # render sends HTTPS through a proxy
@@ -35,11 +49,7 @@ CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
 
 # database: read from DATABASE_URL, fallback to sqlite for local
 
-DATABASES = {
-    "default": dj_database_url.config(
-        default=os.environ.get("DATABASE_URL")
-    )
-}
+
 
 
 # static / media
