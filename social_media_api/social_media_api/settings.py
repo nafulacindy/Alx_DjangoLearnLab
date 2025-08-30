@@ -10,10 +10,24 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+
+import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+STATIC_URL = '/static/'
+
+# This is required for collectstatic in production
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Optional: keep your development static files separate
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -42,6 +56,7 @@ INSTALLED_APPS = [
     "accounts",
     'posts',
     'notifications',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +67,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
 ]
 
 ROOT_URLCONF = 'social_media_api.urls'
@@ -119,7 +136,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -139,3 +156,8 @@ REST_FRAMEWORK = {
         'rest_framework.filters.OrderingFilter',
     ]
 }
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_SSL_REDIRECT = True
+
