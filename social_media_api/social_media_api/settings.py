@@ -18,7 +18,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # security / prod
 DEBUG = False
-ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = [
+    "alx-djangolearnlab-2-zgmt.onrender.com",
+    "localhost",
+]
+
 
 # render sends HTTPS through a proxy
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -30,13 +34,13 @@ X_FRAME_OPTIONS = 'DENY'
 CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']
 
 # database: read from DATABASE_URL, fallback to sqlite for local
+
 DATABASES = {
-    'default': dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
-        conn_max_age=600,
-        ssl_require=False,
+    "default": dj_database_url.config(
+        default=os.environ.get("DATABASE_URL")
     )
 }
+
 
 # static / media
 STATIC_URL = '/static/'
@@ -64,7 +68,10 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-@@(!z4tuu4p0(&_i_4zksn8a54@bgva=!ip%@1f)m+bi(px67z'
+
+
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "fallback-secret-key")
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
