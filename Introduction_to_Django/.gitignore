@@ -1,0 +1,5 @@
+vendor/          ← ignore the entire vendor folder
+.env             ← ignore the .env file
+*.log            ← ignore any file ending in .log
+node_modules/    ← ignore the entire node_modules folder
+storage/logs/*   ← ignore everything inside storage/logs
